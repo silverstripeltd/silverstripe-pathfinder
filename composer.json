@@ -1,15 +1,18 @@
 {
-    "name": "silverstripe-module/skeleton",
-    "description": "A skeleton for SilverStripe modules.",
+    "name": "codecraft/silverstripe-pathfinder",
+    "description": "Lead visitors to content with a succession of questions and answers that suggest content tagged by taxonomy terms",
     "type": "silverstripe-vendormodule",
     "keywords": [
         "silverstripe",
-        "CMS"
+        "CMS",
+        "pathfinder",
+        "decision tree"
     ],
     "license": "BSD-3-Clause",
     "require": {
         "silverstripe/framework": "^4.0",
-        "silverstripe/admin": "^1.0"
+        "silverstripe/admin": "^1.0",
+        "silverstripe/taxonomy": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
@@ -17,13 +20,13 @@
     },
     "autoload": {
         "psr-4": {
-            "SilverStripeModule\\Skeleton\\": "src/",
-            "SilverStripeModule\\Skeleton\\Tests\\": "tests/"
+            "CodeCraft\\Pathfinder\\": "src/",
+            "CodeCraft\\Pathfinder\\Tests\\": "tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "1.x-dev"
         },
         "expose": [
             "client/dist"
