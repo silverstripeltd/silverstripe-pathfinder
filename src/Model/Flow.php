@@ -3,6 +3,7 @@
 
 namespace CodeCraft\Pathfinder\Model;
 
+use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\HasManyList;
 
@@ -47,15 +48,22 @@ class Flow extends DataObject
      */
     public function getCMSFields()
     {
-        $fields = parent::getCMSFields();
+        // Manipulate fields ahead of extension manipulations (such as Fluent)
+        $this->beforeUpdateCMSFields(function (FieldList $fields) {
 
-        $titleField = $fields->dataFieldByName('Title');
+            $fields->removeByName([
+                'PathfinderID',
+            ]);
 
-        if ($titleField) {
-            $titleField->setDescription('Only shown in the CMS');
-        }
+            // Title field
+            $titleField = $fields->dataFieldByName('Title');
 
-        return $fields;
+            if ($titleField) {
+                $titleField->setDescription('Only shown in the CMS');
+            }
+        });
+
+        return parent::getCMSFields();
     }
 
     /**

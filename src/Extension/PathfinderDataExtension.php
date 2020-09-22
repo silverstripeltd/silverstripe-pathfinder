@@ -35,7 +35,17 @@ class PathfinderDataExtension extends DataExtension
     ];
 
     /**
-     * {@inheritDoc}
+     * {@see DataObject::onAfterDelete()}
+     */
+    public function onAfterDelete()
+    {
+        if ($this->Pathfinder()) {
+            $this->Pathfinder()->delete();
+        }
+    }
+
+    /**
+     * {@see DataObject::onBeforeWrite()}
      */
     public function onBeforeWrite()
     {
