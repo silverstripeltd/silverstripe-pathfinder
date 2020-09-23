@@ -14,13 +14,6 @@ use SilverStripe\Control\RequestHandler;
 class PathfinderRequestHandler extends RequestHandler
 {
     /**
-     * @var array
-     */
-    private static $allowed_actions = [
-        'reset',
-    ];
-
-    /**
      * @var Pathfinder
      */
     protected $dataRecord;
@@ -64,24 +57,5 @@ class PathfinderRequestHandler extends RequestHandler
     public function getController()
     {
         return $this->controller;
-    }
-
-    /**
-     * The reset action
-     *
-     * @return HTTPResponse|void
-     */
-    public function reset()
-    {
-        // Clear the user's progress
-        $this->clearProgress();
-
-        if (!$this->getController()) {
-            $this->getController()->httpError(500, 'Cannot continue with request');
-            return;
-        }
-
-        // Redirect to the start of the Pathfinder
-        return $this->redirect($this->getController()->Link());
     }
 }
