@@ -21,16 +21,10 @@ Relies on [silverstripe/silverstripe-taxonomy](https://github.com/silverstripe/s
 - Control content suggestions by tagging Pages with Taxonomy Terms
 - Answers can be single-choice or multi-choice
 - Questions can be organised in Flows, making CMS usage easier and diversifying pathing logic
-- Pathfinders can be created as a Page, an Elemental block (see [dnadesign/silverstripe-elemental](https://github.com/dnadesign/silverstripe-elemental)), or added as an Extension to existing models
+- Pathfinders can be created as a Page or added as an Extension to existing models
 - Users' progress preserved when navigating away from a partially completed Pathfinder
 - Shortcodes provided to help author Pathfinder content
 - Can be extended to control suggestion results
-
-## Also works with
-
-This module works with other SilverStripe modules:
-
-- [dnadesign/silverstripe-elemental](https://github.com/dnadesign/silverstripe-elemental)
 
 ## Installation
 

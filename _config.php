@@ -1,4 +1,7 @@
 <?php
 
-// You need this file if you don't have anything in the _config folder. If that folder exists
-// and is not empty then you can delete this file.
+use CodeCraft\Pathfinder\Model\Pathfinder;
+use SilverStripe\View\Parsers\ShortcodeParser;
+
+ShortcodeParser::get('default')
+    ->register('reset_link', [Pathfinder::class, 'reset_link']);
