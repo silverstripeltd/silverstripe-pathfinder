@@ -15,6 +15,7 @@ use SilverStripe\ORM\DataObject;
  * Extend a data objects (such as SiteTree) to have a Pathfinder
  *
  * @property DataObject owner
+ * @method Pathfinder|null Pathfinder()
  */
 class PathfinderDataExtension extends DataExtension
 {
