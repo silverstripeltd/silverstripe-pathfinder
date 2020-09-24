@@ -37,6 +37,11 @@ class PathfinderModelAdmin extends ModelAdmin
     private static $menu_priority = 3;
 
     /**
+     * @var string
+     */
+    private static $menu_icon_class = 'font-icon-tree';
+
+    /**
      * @param null $id
      * @param null $fields
      * @return \SilverStripe\Forms\Form
@@ -62,7 +67,7 @@ class PathfinderModelAdmin extends ModelAdmin
                 LiteralField::create(
                     'CreatePathfinderMsg',
                     '<div class="alert alert-info">' .
-                        'Pathfinders are created when you author a Pathfinder' .
+                        'Pathfinders are created when you author a Pathfinder on a Page' .
                     '</div>'
                 )
             );
