@@ -39,8 +39,8 @@ class PathfinderDataExtension extends DataExtension
      */
     public function onAfterDelete()
     {
-        if ($this->Pathfinder()) {
-            $this->Pathfinder()->delete();
+        if ($this->owner->Pathfinder()) {
+            $this->owner->Pathfinder()->delete();
         }
     }
 

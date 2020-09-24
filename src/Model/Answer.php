@@ -249,7 +249,7 @@ class Answer extends DataObject
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getGoToResultsTitle()
     {
@@ -257,7 +257,7 @@ class Answer extends DataObject
     }
 
     /**
-     * @return
+     * @return DropdownField
      */
     public function getGoesToField()
     {

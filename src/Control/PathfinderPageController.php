@@ -8,6 +8,8 @@ use PageController;
 
 /**
  * The controller for {@see PathfinderPage}
+ *
+ * @mixin PathfinderControllerExtension
  */
 class PathfinderPageController extends PageController
 {

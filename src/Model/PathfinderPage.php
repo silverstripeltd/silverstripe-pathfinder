@@ -8,6 +8,8 @@ use Page;
 
 /**
  * A page with a Pathfinder
+ *
+ * @mixin PathfinderDataExtension
  */
 class PathfinderPage extends Page
 {

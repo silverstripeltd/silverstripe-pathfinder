@@ -10,6 +10,7 @@ use SilverStripe\Core\Extension;
  * Extend a controller to support an interactive Pathfinder
  *
  * Let's also typehint the model, because SS doesn't that inherently yet
+ *
  * @property Controller|PathfinderDataExtension owner
  */
 class PathfinderControllerExtension extends Extension
