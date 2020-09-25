@@ -59,9 +59,9 @@ class PathfinderDataExtension extends DataExtension
     }
 
     /**
-     * @param FieldList $fields
+     * {@inheritDoc}
      */
-    public function updateCMSFields($fields)
+    public function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName([
             'Pathfinder',
