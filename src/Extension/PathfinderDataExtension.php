@@ -39,8 +39,8 @@ class PathfinderDataExtension extends DataExtension
      */
     public function onAfterDelete()
     {
-        if ($this->Pathfinder()) {
-            $this->Pathfinder()->delete();
+        if ($this->owner->Pathfinder()) {
+            $this->owner->Pathfinder()->delete();
         }
     }
 
@@ -59,9 +59,9 @@ class PathfinderDataExtension extends DataExtension
     }
 
     /**
-     * @param FieldList $fields
+     * {@inheritDoc}
      */
-    public function updateCMSFields($fields)
+    public function updateCMSFields(FieldList $fields)
     {
         $fields->removeByName([
             'Pathfinder',

@@ -72,7 +72,9 @@ class Flow extends DataObject
     public function populateDefaults()
     {
         // Come up with a helpful title
-        $this->Title = sprintf('Flow %s', $this->Pathfinder()->Flows()->count() + 1);
+        if ($this->Pathfinder()) {
+            $this->Title = sprintf('Flow %s', $this->Pathfinder()->Flows()->count() + 1);
+        }
 
         return parent::populateDefaults();
     }

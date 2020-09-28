@@ -2,6 +2,7 @@
 
 namespace CodeCraft\Pathfinder\Model;
 
+use CodeCraft\Pathfinder\Control\PathfinderPageController;
 use CodeCraft\Pathfinder\Control\PathfinderRequestHandler;
 use CodeCraft\Pathfinder\GridField\GridFieldConfig_CustomRelationEditor;
 use SilverStripe\Control\Controller;

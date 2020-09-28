@@ -1,0 +1,4 @@
+CodeCraft\Pathfinder\Model\PathfinderPage:
+  page:
+    Title: 'Pathfinder Test Page'
+    URLSegment: 'pathfinder-page'
