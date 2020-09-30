@@ -340,6 +340,9 @@ class Answer extends DataObject
             return;
         }
 
+        // Coerce the value for our benefit
+        $value = (int) $value;
+
         if ($this->NextQuestions()->count()) {
             // We're limiting the many_many to one for now
             $this->NextQuestions()->removeAll();

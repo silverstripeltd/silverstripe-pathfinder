@@ -26,7 +26,7 @@ use SilverStripe\Versioned\Versioned;
 /**
  * A question used as a step in a Pathfinder
  *
- * @property string Question
+ * @property string QuestionText
  * @property int Sort
  * @method Pathfinder|null Pathfinder()
  * @method Flow Flow()

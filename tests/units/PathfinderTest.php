@@ -40,7 +40,7 @@ class PathfinderTest extends FunctionalTest
 
         $this->assertSame(
             Pathfinder::reset_link([], 'Start again'),
-            '<a href="/pathfinder-page/path/reset" title="Start again">Start again</a>',
+            '<a href="/pathfinder-page/pathfinder/reset" title="Start again">Start again</a>',
             'Reset link should produce expected link attributes and content'
         );
     }

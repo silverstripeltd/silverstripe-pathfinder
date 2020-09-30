@@ -1,6 +1,17 @@
 ---
 Name: pathfinder
 ---
+SilverStripe\Core\Injector\Injector:
+  CodeCraft\Pathfinder\Model\Store\ProgressStore:
+    class: CodeCraft\Pathfinder\Model\Store\SessionProgressStore
+
 SilverStripe\CMS\Model\SiteTree:
   extensions:
     - CodeCraft\Pathfinder\Extension\SiteTreeExtension
+
+SilverStripe\Taxonomy\TaxonomyTerm:
+  extensions:
+    - CodeCraft\Pathfinder\Extension\TaxonomyTermExtension
+
+CodeCraft\Pathfinder\Control\PathfinderRequestHandler:
+  results_model: Page

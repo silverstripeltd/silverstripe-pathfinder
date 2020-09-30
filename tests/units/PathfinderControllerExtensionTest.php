@@ -29,9 +29,9 @@ class PathfinderControllerExtensionTest extends FunctionalTest
         // Let's assume PathfinderPage has auto-created a Pathfinder
         $controller = ModelAsController::controller_for($page);
 
-        $this->assertInstanceOf(
-            Pathfinder::class,
-            $controller->path()
+        $this->assertTrue(
+            $controller->hasAction('pathfinder'),
+            'Should allow the "pathfinder" action'
         );
     }
 }

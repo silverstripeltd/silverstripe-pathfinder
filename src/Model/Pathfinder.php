@@ -4,27 +4,13 @@ namespace CodeCraft\Pathfinder\Model;
 
 use CodeCraft\Pathfinder\Control\PathfinderPageController;
 use CodeCraft\Pathfinder\Control\PathfinderRequestHandler;
+use CodeCraft\Pathfinder\Extension\PathfinderControllerExtension;
 use CodeCraft\Pathfinder\GridField\GridFieldConfig_CustomRelationEditor;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HasRequestHandler;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridField_ActionMenu;
-use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
-use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\Forms\GridField\GridFieldButtonRow;
-use SilverStripe\Forms\GridField\GridFieldConfig;
-use SilverStripe\Forms\GridField\GridFieldConfig_Base;
-use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldDetailForm;
-use SilverStripe\Forms\GridField\GridFieldEditButton;
-use SilverStripe\Forms\GridField\GridFieldFilterHeader;
-use SilverStripe\Forms\GridField\GridFieldPageCount;
-use SilverStripe\Forms\GridField\GridFieldPaginator;
-use SilverStripe\Forms\GridField\GridFieldSortableHeader;
-use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
@@ -33,7 +19,6 @@ use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState;
 use SilverStripe\View\ViewableData;
 
 /**
@@ -132,7 +117,7 @@ class Pathfinder extends DataObject implements HasRequestHandler
             '<a href="%s" title="%s">%s</a>',
             $page->Link(Controller::join_links(
                 PathfinderPageController::config()->get('pathfinder_url_segment'),
-                'reset'
+                'pathfinder/reset'
             )),
             $content,
             $content
@@ -354,7 +339,19 @@ class Pathfinder extends DataObject implements HasRequestHandler
      */
     public function forTemplate()
     {
-        return $this->renderWith($this->getViewerTemplates());
+        $variant = '';
+
+        if ($this->getRequestHandler()->getCurrentQuestion()) {
+            $variant = '_question';
+        }
+
+        if ($this->getRequestHandler()->isComplete()) {
+            $variant = '_results';
+        }
+
+        // We can render the request handler because it has this model as its
+        // failover {@see ViewableData::getFailover()}
+        return $this->getRequestHandler()->renderWith($this->getViewerTemplates($variant));
     }
 
     /**
@@ -368,5 +365,13 @@ class Pathfinder extends DataObject implements HasRequestHandler
             $this->requestHandler = PathfinderRequestHandler::create($this, Controller::curr());
         }
         return $this->requestHandler;
+    }
+
+    /**
+     * @return string
+     */
+    public function Link()
+    {
+        return $this->getRequestHandler()->Link();
     }
 }
