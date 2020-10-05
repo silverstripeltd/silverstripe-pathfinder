@@ -53,6 +53,7 @@ class Flow extends DataObject
 
             $fields->removeByName([
                 'PathfinderID',
+                'Questions', // Questions can be accessed from the Pathfinder CMS tabs
             ]);
 
             // Title field
