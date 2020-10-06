@@ -13,7 +13,6 @@ use SilverStripe\Core\Injector\Injector;
  */
 class SessionProgressStore extends ProgressStore
 {
-
     /**
      * {@inheritDoc}
      */

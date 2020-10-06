@@ -20,7 +20,6 @@ use SilverStripe\Core\Injector\Injector;
  */
 class PathfinderControllerExtension extends Extension
 {
-
     /**
      * Because {@see Pathfinder} is has a request handler, we can allow requests
      * directly to the page's Pathfinder relation data object for it to handle

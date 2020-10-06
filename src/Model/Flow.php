@@ -16,7 +16,6 @@ use SilverStripe\ORM\HasManyList;
  */
 class Flow extends DataObject
 {
-
     /**
      * @var string
      */

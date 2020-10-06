@@ -17,7 +17,6 @@ use SilverStripe\View\Requirements;
  */
 class LocalStorageProgressStore extends RequestVarProgressStore
 {
-
     /**
      * Should include the `.js` in the filename
      *

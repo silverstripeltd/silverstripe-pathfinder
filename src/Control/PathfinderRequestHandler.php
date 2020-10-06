@@ -35,7 +35,6 @@ use Page;
  */
 class PathfinderRequestHandler extends RequestHandler
 {
-
     /**
      * @var array
      */
@@ -401,6 +400,9 @@ class PathfinderRequestHandler extends RequestHandler
 
         $prevStep = $data['Step'] - 1;
         $prevEntry = $store->getByPos($prevStep);
+
+        // We can clear the messages and stored data
+        $form->clearFormState();
 
         if (!$prevEntry) {
             return $this->redirect($this->Link('reset'));

@@ -11,7 +11,6 @@ use SilverStripe\Core\Injector\Injector;
  */
 class RequestVarProgressStore extends ProgressStore
 {
-
     /**
      * @var string
      */

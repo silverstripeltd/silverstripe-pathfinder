@@ -13,9 +13,8 @@ use SilverStripe\View\ViewableData;
  */
 class ProgressEntry extends ViewableData
 {
-
     /**
-     * Declare a "scaffold" for what fields should used. Useful for {@see toArray()}
+     * Declare a "scaffold" for what fields should be used. Useful for {@see toArray()}
      *
      * @var array
      */

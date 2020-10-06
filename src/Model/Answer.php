@@ -29,7 +29,6 @@ use SilverStripe\Versioned\Versioned;
  */
 class Answer extends DataObject
 {
-
     /**
      * @var array
      */

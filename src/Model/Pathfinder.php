@@ -35,7 +35,6 @@ use SilverStripe\View\ViewableData;
  */
 class Pathfinder extends DataObject implements HasRequestHandler
 {
-
     /**
      * @var array
      */

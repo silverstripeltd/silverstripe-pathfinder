@@ -11,7 +11,6 @@ use SilverStripe\View\Requirements;
  */
 class RadioNestedSubsetField extends CompositeField
 {
-
     /**
      * Should include the `.js` in the filename
      *

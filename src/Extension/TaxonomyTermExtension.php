@@ -13,7 +13,6 @@ use SilverStripe\Taxonomy\TaxonomyTerm;
  */
 class TaxonomyTermExtension extends DataExtension
 {
-
     /**
      * @var array
      */

@@ -35,7 +35,6 @@ use SilverStripe\Versioned\Versioned;
  */
 class Question extends DataObject
 {
-
     /**
      * @var array
      */
