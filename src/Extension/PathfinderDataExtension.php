@@ -15,6 +15,7 @@ use SilverStripe\ORM\DataObject;
  * Extend a data objects (such as SiteTree) to have a Pathfinder
  *
  * @property DataObject owner
+ * @method DataObject getOwner()
  * @method Pathfinder|null Pathfinder()
  */
 class PathfinderDataExtension extends DataExtension
@@ -39,8 +40,9 @@ class PathfinderDataExtension extends DataExtension
      */
     public function onAfterDelete()
     {
-        if ($this->owner->Pathfinder()) {
-            $this->owner->Pathfinder()->delete();
+        if ($this->getOwner()->Pathfinder() && $this->getOwner()->Pathfinder()->ID) {
+            // Pathfinder hasn't been deleted yet, so let's clean up
+            $this->getOwner()->Pathfinder()->delete();
         }
     }
 
@@ -49,12 +51,12 @@ class PathfinderDataExtension extends DataExtension
      */
     public function onBeforeWrite()
     {
-        if (!$this->owner->PathfinderID) {
+        if (!$this->getOwner()->PathfinderID) {
             // Ensure there is a pathfinder
             $pathfinder = Pathfinder::create();
-            $pathfinder->Title = sprintf('%s\'s Pathfinder', $this->owner->Title);
+            $pathfinder->Title = sprintf('%s\'s Pathfinder', $this->getOwner()->Title);
             $pathfinder->write();
-            $this->owner->PathfinderID = $pathfinder->ID;
+            $this->getOwner()->PathfinderID = $pathfinder->ID;
         }
     }
 
@@ -67,7 +69,7 @@ class PathfinderDataExtension extends DataExtension
             'Pathfinder',
         ]);
 
-        if (!$this->owner->Pathfinder()) {
+        if (!$this->getOwner()->Pathfinder()) {
             // No Pathfinder message
             $fields->addFieldToTab(
                 'Root.Pathfinder',
@@ -83,7 +85,7 @@ class PathfinderDataExtension extends DataExtension
             $pathfinderField = GridField::create(
                 'Pathfinder',
                 null,
-                Pathfinder::get()->byIDs([$this->owner->PathfinderID])
+                Pathfinder::get()->byIDs([$this->getOwner()->PathfinderID])
             );
             $pathfinderField->getConfig()
                 ->addComponents([
