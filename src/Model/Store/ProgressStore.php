@@ -229,6 +229,14 @@ class ProgressStore
     }
 
     /**
+     * @return ProgressEntry|null
+     */
+    public function last()
+    {
+        return $this->getByPos($this->count());
+    }
+
+    /**
      * A heuristic for whether this story can/should determine if a specific
      * question is the next in sequence
      *

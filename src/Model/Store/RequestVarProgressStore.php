@@ -44,7 +44,7 @@ class RequestVarProgressStore extends ProgressStore
      */
     public static function encode($store)
     {
-        return urlencode(base64_encode(json_encode($store)));
+        return base64_encode(json_encode($store));
     }
 
     /**
@@ -53,7 +53,7 @@ class RequestVarProgressStore extends ProgressStore
      */
     public static function decode($encoded)
     {
-        return json_decode(base64_decode(urldecode($encoded)), true);
+        return json_decode(base64_decode($encoded), true);
     }
 
     /**
@@ -77,7 +77,7 @@ class RequestVarProgressStore extends ProgressStore
         $request = Controller::curr()->getRequest();
 
         // Accept query variable from GET or POST
-        $this->encodedProgress = $request->requestVar($this->getProgressVarName());
+        $this->encodedProgress = urldecode($request->requestVar($this->getProgressVarName()));
 
         return $this->encodedProgress;
     }
@@ -115,22 +115,44 @@ class RequestVarProgressStore extends ProgressStore
     }
 
     /**
+     * @param array $vars
+     * @param string $url
+     *
+     * @return string
+     */
+    public function mergeRequestVarsWithURL($vars, $url)
+    {
+        $queryString = parse_url($url, PHP_URL_QUERY);
+        parse_str($queryString, $current);
+
+        $output = array_merge($current, $vars);
+
+        // Match the query segment of the url
+        preg_match('/\?(.*?)(?:#|$)/s', $url, $matches);
+
+        $existing = array_key_exists(1, $matches) ? $matches[1] : '';
+
+        if ($existing) {
+            // Insert it into the url
+            return str_replace($existing, http_build_query($output), $url);
+        }
+
+        return sprintf('%s?%s', $url, http_build_query($output));
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function augmentURL($url, $form = null)
     {
         $url = parent::augmentURL($url);
 
-        // Match the query segment of the url
-        preg_match('/\?(.*?)(?:#|$)/s', $url, $matches);
+        $progress = 0;
 
-        // Prepare entries to be stored in the url
-        $stored = $this->getEncodedStore();
+        if ($this->count()) {
+            $progress = $this->getEncodedStore();
+        }
 
-        // Add the stored value to the query
-        $query = implode('&', [$matches[1], sprintf('progress=%s', $this->getEncodedStore())]);
-
-        // Insert it into the url
-        return str_replace($matches[1], $query, $url);
+        return $this->mergeRequestVarsWithURL(['progress' => $progress], $url);
     }
 }

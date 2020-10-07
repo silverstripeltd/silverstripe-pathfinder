@@ -32,14 +32,22 @@ class LocalStorageProgressStore extends RequestVarProgressStore
     /**
      * {@inheritDoc}
      */
-    public function updateForm($form)
+    public function __construct()
     {
+        parent::__construct();
+
         $formJs = $this->config()->get('require_form_js');
 
         if ($formJs) {
             Requirements::javascript($formJs);
         }
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function updateForm($form)
+    {
         $form->Fields()->add(
             HiddenField::create($this->getProgressVarName(), null, $this->getEncodedStore())
         );

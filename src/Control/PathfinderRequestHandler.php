@@ -356,7 +356,6 @@ class PathfinderRequestHandler extends RequestHandler
         /** @var Answer $answer */
         $answer = $choices->first()->Answer(); // All choices should be for the same answer
         $stepNum = $data['Step'];
-        $nextQuestion = $answer->getNextQuestion();
 
         if ($store->getByPos($stepNum)) {
             // Clear previously stored answers (including and after this question)
@@ -368,6 +367,8 @@ class PathfinderRequestHandler extends RequestHandler
             $answer,
             $choices
         );
+
+        $nextQuestion = $this->getNextQuestion();
 
         if ($nextQuestion) {
             // Send them to the next question!
@@ -506,7 +507,15 @@ class PathfinderRequestHandler extends RequestHandler
             return $this->Link('?questions-missing=1');
         }
 
-        return $this->Link(sprintf('question?id=%s&step=1', $this->Questions()->first()->ID));
+        return $this->Link(sprintf('question?id=%s&step=1&start=1', $this->Questions()->first()->ID));
+    }
+
+    /**
+     * @return string
+     */
+    public function getRestartLink()
+    {
+        return $this->Link('reset?restart=1');
     }
 
     /**
@@ -517,6 +526,68 @@ class PathfinderRequestHandler extends RequestHandler
         $step = $this->getRequest()->getVar('step');
 
         return (bool) $this->getStore()->getByPos($step - 1);
+    }
+
+    /**
+     * @return Question|null
+     * @throws \Exception
+     */
+    public function getNextQuestion()
+    {
+        $store = $this->getStore();
+        $last = $store->last();
+
+        if (!$last) {
+            return null;
+        }
+
+        /** @var Answer $answer */
+        $answer = Answer::get()->byID($last->AnswerID);
+
+        if (!$answer) {
+            return null;
+        }
+
+        return $answer->getNextQuestion();
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function hasProgress()
+    {
+        return $this->getStore()->count();
+    }
+
+    /**
+     * @return string
+     */
+    public function getProgressLink()
+    {
+        $store = $this->getStore();
+        $last = $store->last();
+
+        if (!$last) {
+            // Link to start
+            return $store->augmentURL($this->getController()->Link());
+        }
+
+        $nextQuestion = $this->getNextQuestion();
+
+        if (!$nextQuestion) {
+            // Link to results
+            return $store->augmentURL($this->Link('suggestions?complete=1'));
+        }
+
+        // Link to last answered question
+        return $store->augmentURL(
+            $this->Link(sprintf(
+                'question?id=%s&step=%s',
+                $nextQuestion->ID,
+                $store->count() + 1
+            ))
+        );
     }
 
     /**
@@ -545,9 +616,16 @@ class PathfinderRequestHandler extends RequestHandler
      */
     public function reset()
     {
-        $this->getStore()->clear();
+        $store = $this->getStore();
+        $store->clear();
 
-        return $this->redirect($this->Link());
+        $link = $this->getController()->Link();
+
+        if ($this->getRequest()->getVar('restart')) {
+            $link = $this->getStartLink();
+        }
+
+        return $this->redirect($store->augmentURL($link));
     }
 
     /**

@@ -27,6 +27,7 @@ use SilverStripe\View\ViewableData;
  * @property string Title
  * @property string StartContent
  * @property string StartButtonText
+ * @property string ContinueButtonText
  * @property string ResultsFoundContent
  * @property string ResultsNotFoundContent
  * @property string SupportContent
@@ -54,6 +55,7 @@ class Pathfinder extends DataObject implements HasRequestHandler
         'Title' => 'Varchar(255)',
         'StartContent' => 'HTMLText',
         'StartButtonText' => 'Varchar(255)',
+        'ContinueButtonText' => 'Varchar(255)',
         'ResultsFoundContent' => 'HTMLText',
         'ResultsNotFoundContent' => 'HTMLText',
         'SupportContent' => 'HTMLText',
@@ -190,6 +192,16 @@ class Pathfinder extends DataObject implements HasRequestHandler
                 $startButtonTextField
                     ->setAttribute('placeholder', 'Start')
                     ->setDescription('Leave blank to use default');
+            }
+
+            // Button text Field
+            /** @var TextField $continueButtonTextField */
+            $continueButtonTextField = $fields->dataFieldByName('ContinueButtonText');
+
+            if ($continueButtonTextField) {
+                $continueButtonTextField
+                    ->setAttribute('placeholder', 'Continue')
+                    ->setDescription('Displayed on the start screen when the user has existing progress. Leave blank to use default');
             }
 
             // Results found header
@@ -331,6 +343,22 @@ class Pathfinder extends DataObject implements HasRequestHandler
         }
 
         return $page->Title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStartButtonText()
+    {
+        return $this->getField('StartButtonText') ?: 'Start';
+    }
+
+    /**
+     * @return string
+     */
+    public function getContinueButtonText()
+    {
+        return $this->getField('ContinueButtonText') ?: 'Continue';
     }
 
     /**
