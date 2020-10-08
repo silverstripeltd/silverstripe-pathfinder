@@ -81,11 +81,6 @@ class QuestionTest extends SapphireTest
             'Should be able to smoke test getCMSValidator()'
         );
 
-        $this->assertFalse(
-            $question->getFromAnswer(),
-            'Should be able to smoke test getFromAnswer()'
-        );
-
         $this->assertNotEmpty(
             $question->getTitle(),
             'Should be able to smoke test getTitle()'

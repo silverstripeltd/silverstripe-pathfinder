@@ -279,9 +279,7 @@ class Answer extends DataObject
         }
 
         $options = [];
-        $disabledItems = [
-            $this->Question()->ID,
-        ];
+        $disabledItems = [];
 
         foreach ($pathfinder->Flows() as $flow) {
             $flowValue = sprintf('Flow_%s', $flow->ID);
@@ -295,9 +293,16 @@ class Answer extends DataObject
             }
         }
 
-        return $field
-            ->setSource($options)
-            ->setDisabledItems($disabledItems);
+        // Set the field source
+        $field->setSource($options);
+
+        // Let's help the user avoid creating loops in the path
+        $disabledItems = array_merge($disabledItems, $this->Question()->recursivePrecedentIDs());
+        $field
+            ->setDisabledItems($disabledItems)
+            ->setDescription('Note: All preceeding questions are disabled.');
+
+        return $field;
     }
 
     /**
@@ -309,7 +314,7 @@ class Answer extends DataObject
      */
     public function saveNextQuestionID($value)
     {
-        if (!is_int($value)) {
+        if (!is_numeric($value)) {
             // We're expecting Question IDs
             return;
         }
@@ -319,7 +324,7 @@ class Answer extends DataObject
             $this->NextQuestions()->removeAll();
         }
 
-        if ($value == 0) {
+        if ($value <= 0) {
             // Nothing else to do
             return;
         }
