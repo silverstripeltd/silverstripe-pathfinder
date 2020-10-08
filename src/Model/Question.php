@@ -226,19 +226,6 @@ class Question extends DataObject
     }
 
     /**
-     * The answer which preceded this question in the Pathfinder flow
-     *
-     * @return Answer|null
-     */
-    public function getFromAnswer()
-    {
-        /** @var Answer|null $answer */
-        $answer = $this->FromAnswers()->first();
-
-        return $answer;
-    }
-
-    /**
      * A title for the CMS to use
      *
      * @return string
@@ -249,5 +236,24 @@ class Question extends DataObject
         $field = DBField::create_field('Text', $this->QuestionText);
 
         return $field->LimitCharactersToClosestWord(50);
+    }
+
+    /**
+     * Establish all questions that preceeded this question, including this question
+     *
+     * @return DataList
+     */
+    public function recursivePrecedentIDs($precedents = [])
+    {
+        $precedents[] = $this->ID;
+
+        if ($this->FromAnswers()->count()) {
+            foreach ($this->FromAnswers() as $answer) {
+                // Continue the walk
+                $precedents = array_merge($precedents, $answer->Question()->recursivePrecedentIDs($precedents));
+            }
+        }
+
+        return array_unique($precedents);
     }
 }
