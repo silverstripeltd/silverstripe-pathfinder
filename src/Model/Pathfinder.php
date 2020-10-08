@@ -17,6 +17,7 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ViewableData;
@@ -33,6 +34,7 @@ use SilverStripe\View\ViewableData;
  * @property string SupportContent
  * @method HasManyList|Question[] Questions()
  * @method HasManyList|Flow[] Flows()
+ * @method ManyManyList ExcludedPages()
  */
 class Pathfinder extends DataObject implements HasRequestHandler
 {

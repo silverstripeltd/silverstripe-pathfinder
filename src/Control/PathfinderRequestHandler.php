@@ -468,7 +468,16 @@ class PathfinderRequestHandler extends RequestHandler
         $results = $model::get()->byIds([0]);
 
         if ($gatheredTerms->count()) {
-            $results = $model::get()->filter(['Terms.ID' => $gatheredTerms->column('ID')]);
+            $results = $model::get()->filter(['Terms.ID' => $gatheredTerms->column()]);
+        }
+
+        // Exclude from results
+        $selfExcludedIds = SiteTree::get()->filter(['HideFromPathfinders' => true])->column();
+        $excludePageIds = $this->ExcludedPages()->column();
+        $excludeIds = array_merge($excludePageIds, $selfExcludedIds);
+
+        if (count($excludeIds)) {
+            $results = $results->exclude(['ID' => $excludeIds]);
         }
 
         $this->extend('updateResults', $results, $gatheredTerms);
