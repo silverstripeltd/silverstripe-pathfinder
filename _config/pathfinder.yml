@@ -1,0 +1,6 @@
+---
+Name: pathfinder
+---
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - CodeCraft\Pathfinder\Extension\SiteTreeExtension
