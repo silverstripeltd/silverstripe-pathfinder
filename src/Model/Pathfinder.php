@@ -5,6 +5,7 @@ namespace CodeCraft\Pathfinder\Model;
 use CodeCraft\Pathfinder\Control\PathfinderPageController;
 use CodeCraft\Pathfinder\Control\PathfinderRequestHandler;
 use CodeCraft\Pathfinder\GridField\GridFieldConfig_CustomRelationEditor;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HasRequestHandler;
 use SilverStripe\Forms\FieldList;
@@ -28,6 +29,7 @@ use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
@@ -79,6 +81,13 @@ class Pathfinder extends DataObject implements HasRequestHandler
     private static $has_many = [
         'Questions' => Question::class,
         'Flows' => Flow::class,
+    ];
+
+    /**
+     * @var array
+     */
+    private static $many_many = [
+        'ExcludedPages' => SiteTree::class,
     ];
 
     /**
@@ -148,6 +157,10 @@ class Pathfinder extends DataObject implements HasRequestHandler
     {
         // Manipulate fields ahead of extension manipulations (such as Fluent)
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
+
+            $fields->removeByName([
+                'ExcludedPages',
+            ]);
 
             // Questions field
             /** @var GridField $questionsField */
@@ -258,6 +271,19 @@ class Pathfinder extends DataObject implements HasRequestHandler
                     )
                 );
             }
+
+            // Excluded pages field
+            $excludedField = TreeMultiselectField::create('ExcludedPages', null, SiteTree::class);
+
+            $fields->findOrMakeTab(
+                'Root.Results',
+                'Results / Suggestions'
+            );
+
+            $fields->addFieldsToTab(
+                'Root.Results',
+                $excludedField
+            );
         });
 
         return parent::getCMSFields();
