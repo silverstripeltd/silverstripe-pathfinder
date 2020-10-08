@@ -319,6 +319,11 @@ class Answer extends DataObject
             $this->NextQuestions()->removeAll();
         }
 
+        if ($value == 0) {
+            // Nothing else to do
+            return;
+        }
+
         $question = Question::get()->byID($value);
 
         if (!$question) {
