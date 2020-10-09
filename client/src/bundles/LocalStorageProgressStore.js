@@ -14,7 +14,6 @@ const getQueryVariable = (variable) => {
   const getVars = query.split('&');
   let match = false;
 
-
   getVars.forEach((getVar) => {
     const pair = getVar.split('=');
 
