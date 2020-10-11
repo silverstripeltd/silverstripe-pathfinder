@@ -151,6 +151,8 @@ class AnswerTest extends SapphireTest
 
         $this->assertSame(
             [
+                'Flow_Default' => 'Default flow',
+                3 => 'Question 1',
                 'Flow_1' => 'Flow 1',
                 4 => 'Question 2',
             ],
