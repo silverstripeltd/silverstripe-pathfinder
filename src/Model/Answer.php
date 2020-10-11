@@ -97,6 +97,11 @@ class Answer extends DataObject
     private static $go_to_results_title = 'Results';
 
     /**
+     * @var DropdownField
+     */
+    protected $goesToField;
+
+    /**
      * {@inheritDoc}
      */
     public function onAfterDelete()
@@ -261,6 +266,10 @@ class Answer extends DataObject
      */
     public function getGoesToField()
     {
+        if ($this->goesToField) {
+            return $this->goesToField;
+        }
+
         $field = DropdownField::create(
             'NextQuestionID',
             'Goes to'
@@ -281,6 +290,16 @@ class Answer extends DataObject
         $options = [];
         $disabledItems = [];
 
+        // Add questions from the default flow
+        $defaultFlowValue = 'Flow_Default';
+        $options[$defaultFlowValue] = 'Default flow';
+        $disabledItems[] = $defaultFlowValue;
+        foreach ($pathfinder->Questions()->filter(['FlowID' => [null, 0]])->map('ID', 'QuestionText') as $id => $text) {
+            // Do this explicitly so keys are preserved
+            $options[$id] = $text;
+        }
+
+        // Add questions per flow
         foreach ($pathfinder->Flows() as $flow) {
             $flowValue = sprintf('Flow_%s', $flow->ID);
             // Display the flow for easy reference, but disable it
@@ -302,7 +321,9 @@ class Answer extends DataObject
             ->setDisabledItems($disabledItems)
             ->setDescription('Note: All preceeding questions are disabled.');
 
-        return $field;
+        $this->goesToField = $field;
+
+        return $this->goesToField;
     }
 
     /**
