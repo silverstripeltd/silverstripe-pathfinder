@@ -212,6 +212,9 @@ class PathfinderRequestHandler extends RequestHandler
         if (!$question) {
             $fields->add(HeaderField::create('NoQuestionMessage', 'No question to display'));
 
+            $form = $this->getStore()->updateForm($form);
+            $this->extend('updateForm', $form);
+
             return $form;
         }
 
@@ -221,6 +224,9 @@ class PathfinderRequestHandler extends RequestHandler
 
         if (!$answers->count()) {
             $fields->add(HeaderField::create('NoQuestionMessage', 'No answers to display'));
+
+            $form = $this->getStore()->updateForm($form);
+            $this->extend('updateForm', $form);
 
             return $form;
         }
@@ -348,7 +354,7 @@ class PathfinderRequestHandler extends RequestHandler
         }
 
         // We can clear the messages and stored data
-        $form->clearFormState();
+        $this->clearQuestionFormState($form);
 
         // We'll need the store
         $store = $this->getStore();
@@ -403,7 +409,7 @@ class PathfinderRequestHandler extends RequestHandler
         $prevEntry = $store->getByPos($prevStep);
 
         // We can clear the messages and stored data
-        $form->clearFormState();
+        $this->clearQuestionFormState($form);
 
         if (!$prevEntry) {
             return $this->redirect($this->Link('reset'));
@@ -418,6 +424,19 @@ class PathfinderRequestHandler extends RequestHandler
         );
 
         return $this->redirect($url);
+    }
+
+    /**
+     * Clear the form's state, and any offer an extension
+     * point for case-specific needs
+     *
+     * @param Form $form
+     * @return void
+     */
+    public function clearQuestionFormState($form)
+    {
+        $form->clearFormState();
+        $this->extend('clearQuestionFormState', $form);
     }
 
     /**
