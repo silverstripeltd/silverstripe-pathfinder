@@ -13,7 +13,6 @@ use PageController;
  */
 class PathfinderPageController extends PageController
 {
-
     /**
      * @var string
      */

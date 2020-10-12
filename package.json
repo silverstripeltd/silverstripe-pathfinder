@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "babel-polyfill": "6.7.4",
+    "element-closest-polyfill": "^1.0.2",
+    "nodelist-foreach-polyfill": "^1.2.0",
     "react": "^16.8.3"
   },
   "devDependencies": {
@@ -29,6 +31,7 @@
     "babel-jest": "^23.6.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.10.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "jest-cli": "^23.6.0"
   },
   "babel": {
@@ -58,7 +61,6 @@
       "!**/node_modules/**",
       "!**/boot/**",
       "!**/bundles/**",
-      "!**/legacy/**",
       "!**/vendor/**",
       "!**/*-test.{js,jsx}",
       "!**/*-story.{js,jsx}"

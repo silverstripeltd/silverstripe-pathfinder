@@ -29,7 +29,6 @@ use SilverStripe\Versioned\Versioned;
  */
 class Answer extends DataObject
 {
-
     /**
      * @var array
      */
@@ -339,6 +338,9 @@ class Answer extends DataObject
             // We're expecting Question IDs
             return;
         }
+
+        // Coerce the value for our benefit
+        $value = (int) $value;
 
         if ($this->NextQuestions()->count()) {
             // We're limiting the many_many to one for now

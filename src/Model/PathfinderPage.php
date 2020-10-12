@@ -13,7 +13,6 @@ use Page;
  */
 class PathfinderPage extends Page
 {
-
     /**
      * @var string
      */

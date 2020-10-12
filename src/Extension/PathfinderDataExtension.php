@@ -20,7 +20,6 @@ use SilverStripe\ORM\DataObject;
  */
 class PathfinderDataExtension extends DataExtension
 {
-
     /**
      * @var array
      */

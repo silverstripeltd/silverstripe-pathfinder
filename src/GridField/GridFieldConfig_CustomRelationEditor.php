@@ -19,7 +19,6 @@ use SilverStripe\Versioned\VersionedGridFieldStateExtension;
  */
 class GridFieldConfig_CustomRelationEditor extends GridFieldConfig
 {
-
     /**
      * {@inheritDoc}
      */

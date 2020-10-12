@@ -25,7 +25,8 @@ const config = [
   {
     name: 'js',
     entry: {
-      bundle: `${PATHS.SRC}/bundles/bundle.js`,
+      RadioNestedSubsetField: `${PATHS.SRC}/bundles/RadioNestedSubsetField.js`,
+      LocalStorageProgressStore: `${PATHS.SRC}/bundles/LocalStorageProgressStore.js`,
     },
     output: {
       path: PATHS.DIST,
@@ -36,19 +37,6 @@ const config = [
     externals,
     module: moduleJS(ENV, PATHS),
     plugins: pluginJS(ENV, PATHS),
-  },
-  {
-    name: 'css',
-    entry: {
-      bundle: `${PATHS.SRC}/bundles/bundle.scss`,
-    },
-    output: {
-      path: PATHS.DIST,
-      filename: 'styles/[name].css',
-    },
-    devtool: (ENV !== 'production') ? 'source-map' : '',
-    module: moduleCSS(ENV, PATHS),
-    plugins: pluginCSS(ENV, PATHS),
   },
 ];
 

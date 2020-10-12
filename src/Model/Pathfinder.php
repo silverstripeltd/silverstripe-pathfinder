@@ -4,36 +4,22 @@ namespace CodeCraft\Pathfinder\Model;
 
 use CodeCraft\Pathfinder\Control\PathfinderPageController;
 use CodeCraft\Pathfinder\Control\PathfinderRequestHandler;
+use CodeCraft\Pathfinder\Extension\PathfinderControllerExtension;
 use CodeCraft\Pathfinder\GridField\GridFieldConfig_CustomRelationEditor;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HasRequestHandler;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridField_ActionMenu;
-use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
-use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\Forms\GridField\GridFieldButtonRow;
-use SilverStripe\Forms\GridField\GridFieldConfig;
-use SilverStripe\Forms\GridField\GridFieldConfig_Base;
-use SilverStripe\Forms\GridField\GridFieldDataColumns;
-use SilverStripe\Forms\GridField\GridFieldDeleteAction;
-use SilverStripe\Forms\GridField\GridFieldDetailForm;
-use SilverStripe\Forms\GridField\GridFieldEditButton;
-use SilverStripe\Forms\GridField\GridFieldFilterHeader;
-use SilverStripe\Forms\GridField\GridFieldPageCount;
-use SilverStripe\Forms\GridField\GridFieldPaginator;
-use SilverStripe\Forms\GridField\GridFieldSortableHeader;
-use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState;
 use SilverStripe\View\ViewableData;
 
 /**
@@ -42,15 +28,16 @@ use SilverStripe\View\ViewableData;
  * @property string Title
  * @property string StartContent
  * @property string StartButtonText
+ * @property string ContinueButtonText
  * @property string ResultsFoundContent
  * @property string ResultsNotFoundContent
  * @property string SupportContent
  * @method HasManyList|Question[] Questions()
  * @method HasManyList|Flow[] Flows()
+ * @method ManyManyList ExcludedPages()
  */
 class Pathfinder extends DataObject implements HasRequestHandler
 {
-
     /**
      * @var array
      */
@@ -70,6 +57,7 @@ class Pathfinder extends DataObject implements HasRequestHandler
         'Title' => 'Varchar(255)',
         'StartContent' => 'HTMLText',
         'StartButtonText' => 'Varchar(255)',
+        'ContinueButtonText' => 'Varchar(255)',
         'ResultsFoundContent' => 'HTMLText',
         'ResultsNotFoundContent' => 'HTMLText',
         'SupportContent' => 'HTMLText',
@@ -132,7 +120,7 @@ class Pathfinder extends DataObject implements HasRequestHandler
             '<a href="%s" title="%s">%s</a>',
             $page->Link(Controller::join_links(
                 PathfinderPageController::config()->get('pathfinder_url_segment'),
-                'reset'
+                'pathfinder/reset'
             )),
             $content,
             $content
@@ -206,6 +194,16 @@ class Pathfinder extends DataObject implements HasRequestHandler
                 $startButtonTextField
                     ->setAttribute('placeholder', 'Start')
                     ->setDescription('Leave blank to use default');
+            }
+
+            // Button text Field
+            /** @var TextField $continueButtonTextField */
+            $continueButtonTextField = $fields->dataFieldByName('ContinueButtonText');
+
+            if ($continueButtonTextField) {
+                $continueButtonTextField
+                    ->setAttribute('placeholder', 'Continue')
+                    ->setDescription('Displayed on the start screen when the user has existing progress. Leave blank to use default');
             }
 
             // Results found header
@@ -352,9 +350,37 @@ class Pathfinder extends DataObject implements HasRequestHandler
     /**
      * @return string
      */
+    public function getStartButtonText()
+    {
+        return $this->getField('StartButtonText') ?: 'Start';
+    }
+
+    /**
+     * @return string
+     */
+    public function getContinueButtonText()
+    {
+        return $this->getField('ContinueButtonText') ?: 'Continue';
+    }
+
+    /**
+     * @return string
+     */
     public function forTemplate()
     {
-        return $this->renderWith($this->getViewerTemplates());
+        $variant = '';
+
+        if ($this->getRequestHandler()->getCurrentQuestion()) {
+            $variant = '_question';
+        }
+
+        if ($this->getRequestHandler()->isComplete()) {
+            $variant = '_results';
+        }
+
+        // We can render the request handler because it has this model as its
+        // failover {@see ViewableData::getFailover()}
+        return $this->getRequestHandler()->renderWith($this->getViewerTemplates($variant));
     }
 
     /**
@@ -368,5 +394,13 @@ class Pathfinder extends DataObject implements HasRequestHandler
             $this->requestHandler = PathfinderRequestHandler::create($this, Controller::curr());
         }
         return $this->requestHandler;
+    }
+
+    /**
+     * @return string
+     */
+    public function Link()
+    {
+        return $this->getRequestHandler()->Link();
     }
 }

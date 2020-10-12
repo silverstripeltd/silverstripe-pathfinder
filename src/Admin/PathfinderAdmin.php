@@ -13,7 +13,6 @@ use SilverStripe\Forms\LiteralField;
  */
 class PathfinderModelAdmin extends ModelAdmin
 {
-
     /**
      * @var array
      */
