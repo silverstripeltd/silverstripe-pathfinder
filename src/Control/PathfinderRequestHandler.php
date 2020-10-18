@@ -460,7 +460,7 @@ class PathfinderRequestHandler extends RequestHandler
             }
         }
 
-        $this->extend('updateGatheredTerms', $terms, $choiceIds,$store);
+        $this->extend('updateGatheredTerms', $terms, $choiceIds, $store);
 
         return $terms;
     }
