@@ -4,7 +4,6 @@ namespace CodeCraft\Pathfinder\Model;
 
 use CodeCraft\Pathfinder\Control\PathfinderPageController;
 use CodeCraft\Pathfinder\Control\PathfinderRequestHandler;
-use CodeCraft\Pathfinder\Extension\PathfinderControllerExtension;
 use CodeCraft\Pathfinder\GridField\GridFieldConfig_CustomRelationEditor;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
@@ -17,6 +16,7 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Versioned\Versioned;
