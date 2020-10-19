@@ -235,7 +235,7 @@ class Answer extends DataObject
     public function getGoesToSummary()
     {
         return $this->NextQuestions()->count()
-            ? $this->getNextQuestion()->getTitle()
+            ? $this->getNextQuestion()->getCMSTitle()
             : $this->getGoToResultsTitle();
     }
 
@@ -293,7 +293,7 @@ class Answer extends DataObject
         $defaultFlowValue = 'Flow_Default';
         $options[$defaultFlowValue] = 'Default flow';
         $disabledItems[] = $defaultFlowValue;
-        foreach ($pathfinder->Questions()->filter(['FlowID' => [null, 0]])->map('ID', 'QuestionText') as $id => $text) {
+        foreach ($pathfinder->Questions()->filter(['FlowID' => [null, 0]])->map('ID', 'CMSTitle') as $id => $text) {
             // Do this explicitly so keys are preserved
             $options[$id] = $text;
         }
@@ -305,7 +305,10 @@ class Answer extends DataObject
             $options[$flowValue] = $flow->Title;
             $disabledItems[] = $flowValue;
 
-            foreach ($flow->Questions()->map('ID', 'QuestionText') as $id => $text) {
+            // We want the flow's questions, and to filter them to make sure they apply to the current pathfinder
+            $questionsInFlow = $flow->Questions()->filter(['PathfinderID' => $pathfinder->ID]);
+
+            foreach ($questionsInFlow->map('ID', 'CMSTitle') as $id => $text) {
                 // Do this explicitly so keys are preserved
                 $options[$id] = $text;
             }

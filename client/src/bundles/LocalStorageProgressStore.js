@@ -54,11 +54,6 @@ const LocalStorageProgressStore = () => {
   // When the request provides an encoded copy of the progress data, we verify
   // to see if it's later than what is stored locally, before storing it.
   // If it's not the latest, we redirect to update the request to the latest store
-  if (getQueryVariable('progress') === '0') {
-    // Reset local storage
-    window.localStorage.removeItem('PathfinderProgress');
-    return;
-  }
 
   const encodedRequestProgress = getQueryVariable('progress');
   const encodedLocalProgress = window.localStorage.getItem('PathfinderProgress');

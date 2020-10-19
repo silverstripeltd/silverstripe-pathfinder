@@ -40,6 +40,7 @@ class PathfinderRequestHandler extends RequestHandler
      */
     private static $allowed_actions = [
         'Form',
+        'start',
         'question',
         'reset',
         'suggestions',
@@ -210,15 +211,13 @@ class PathfinderRequestHandler extends RequestHandler
         $question = $this->getCurrentQuestion();
 
         if (!$question) {
-            $fields->add(HeaderField::create('NoQuestionMessage', 'No question to display'));
+            $fields->add(HeaderField::create('NoQuestionMessage', 'No options available'));
 
             $form = $this->getStore()->updateForm($form);
             $this->extend('updateForm', $form);
 
             return $form;
         }
-
-        $fields->add(HeaderField::create('Question', $question->QuestionText));
 
         $answers = $question->Answers();
 
@@ -427,6 +426,19 @@ class PathfinderRequestHandler extends RequestHandler
     }
 
     /**
+     * Clear all stored data
+     *
+     * @return PathfinderRequestHandler $this
+     */
+    public function clearAll()
+    {
+        $this->getStore()->clear();
+        $this->clearQuestionFormState($this->Form());
+
+        return $this;
+    }
+
+    /**
      * Clear the form's state, and any offer an extension
      * point for case-specific needs
      *
@@ -493,6 +505,9 @@ class PathfinderRequestHandler extends RequestHandler
         $selfExcludedIds = SiteTree::get()->filter(['HideFromPathfinders' => true])->column();
         $excludePageIds = $this->ExcludedPages()->column();
         $excludeIds = array_merge($excludePageIds, $selfExcludedIds);
+        
+        // Also exclude current PathfinderPage
+        $excludeIds[] = $this->getOwner()->data()->getPage()->ID;
 
         if (count($excludeIds)) {
             $results = $results->exclude(['ID' => $excludeIds]);
@@ -534,15 +549,7 @@ class PathfinderRequestHandler extends RequestHandler
             return $this->Link('?questions-missing=1');
         }
 
-        return $this->Link(sprintf('question?id=%s&step=1&start=1', $this->Questions()->first()->ID));
-    }
-
-    /**
-     * @return string
-     */
-    public function getRestartLink()
-    {
-        return $this->Link('reset?restart=1');
+        return $this->Link(sprintf('start'));
     }
 
     /**
@@ -625,7 +632,25 @@ class PathfinderRequestHandler extends RequestHandler
         return $this->redirect($this->getController()->Link());
     }
 
-    /**s
+    /**
+     * @return HTTPResponse
+     */
+    public function start()
+    {
+        $link = $this->Link(sprintf('question?id=%s&step=1', $this->Questions()->first()->ID));
+
+        return $this->clearAll()->redirect($this->getStore()->augmentURL($link));
+    }
+
+    /**
+     * @return HTTPResponse
+     */
+    public function reset()
+    {
+        return $this->clearAll()->redirect($this->getStore()->augmentURL($this->getController()->Link()));
+    }
+
+    /**
      * @return HTTPResponse|Controller
      */
     public function question()
@@ -636,23 +661,6 @@ class PathfinderRequestHandler extends RequestHandler
         }
 
         return $this->getController();
-    }
-
-    /**
-     * @return HTTPResponse
-     */
-    public function reset()
-    {
-        $store = $this->getStore();
-        $store->clear();
-
-        $link = $this->getController()->Link();
-
-        if ($this->getRequest()->getVar('restart')) {
-            $link = $this->getStartLink();
-        }
-
-        return $this->redirect($store->augmentURL($link));
     }
 
     /**

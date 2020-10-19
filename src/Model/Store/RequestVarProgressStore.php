@@ -147,12 +147,6 @@ class RequestVarProgressStore extends ProgressStore
     {
         $url = parent::augmentURL($url);
 
-        $progress = 0;
-
-        if ($this->count()) {
-            $progress = $this->getEncodedStore();
-        }
-
-        return $this->mergeRequestVarsWithURL(['progress' => $progress], $url);
+        return $this->mergeRequestVarsWithURL(['progress' => $this->getEncodedStore()], $url);
     }
 }

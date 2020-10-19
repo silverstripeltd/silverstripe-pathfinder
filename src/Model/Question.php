@@ -15,8 +15,10 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldEditButton;
 use SilverStripe\Forms\GridField\GridFieldSortableHeader;
 use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\HasManyList;
@@ -52,6 +54,7 @@ class Question extends DataObject
      */
     private static $db = [
         'QuestionText' => 'Text',
+        'Description' => 'HTMLText',
         'Sort' => 'Int',
     ];
 
@@ -89,6 +92,7 @@ class Question extends DataObject
      */
     private static $summary_fields = [
         'QuestionText' => 'Question',
+        'Flow.Title' => 'Flow',
     ];
 
     /**
@@ -140,6 +144,22 @@ class Question extends DataObject
                 if ($flowField) {
                     $flowField->setDisabled(true);
                 }
+            }
+
+            // Quesiton text field
+            $fields->replaceField(
+                'QuestionText',
+                TextField::create('QuestionText')
+            );
+
+            // Description field
+            /** @var HTMLEditorField $descriptionField */
+            $descriptionField = $fields->dataFieldByName('Description');
+
+            if ($descriptionField) {
+                $descriptionField
+                    ->setRows(5)
+                    ->setRightTitle('(Optional)');
             }
 
             // Flow field
@@ -232,7 +252,7 @@ class Question extends DataObject
     public function getTitle()
     {
         /** @var DBText $field */
-        $field = DBField::create_field('Text', $this->QuestionText);
+        $field = DBField::create_field('Text', $this->getCMSTitle());
 
         return $field->LimitCharactersToClosestWord(50);
     }
@@ -254,5 +274,41 @@ class Question extends DataObject
         }
 
         return array_unique($precedents);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFlowTitle()
+    {
+        return sprintf('Flow: %s', $this->Flow() ? $this->Flow()->Title : 'Default');
+    }
+
+    /**
+     * A title that's helpful for CMS users
+     */
+    public function getCMSTitle()
+    {
+        $parts = [
+            $this->QuestionText,
+            ' (Q#',
+            $this->ID
+        ];
+
+        if ($this->Flow()) {
+            $parts[] = sprintf(', in Flow: %s', $this->Flow()->Title);
+        }
+
+        $parts[] = ')';
+
+        return implode('', $parts);
+    }
+
+    /**
+     * @return string
+     */
+    public function CMSID()
+    {
+        return sprintf('Q#%s', $this->ID);
     }
 }

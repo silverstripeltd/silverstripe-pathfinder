@@ -93,7 +93,7 @@ class AnswerTest extends SapphireTest
         $answer->NextQuestions()->add($nextQuestion);
 
         $this->assertSame(
-            $nextQuestion->Title,
+            $nextQuestion->getCMSTitle(),
             $answer->getGoesToSummary(),
             'Should indicate the answer goes to the next question'
         );
@@ -152,9 +152,9 @@ class AnswerTest extends SapphireTest
         $this->assertSame(
             [
                 'Flow_Default' => 'Default flow',
-                3 => 'Question 1',
+                3 => 'Question 1 (Q#3, in Flow: Flow 1)',
                 'Flow_1' => 'Flow 1',
-                4 => 'Question 2',
+                4 => 'Question 2 (Q#4, in Flow: Flow 1)',
             ],
             $field->getSource(),
             'Field should have a range of options based on flows and questions'
