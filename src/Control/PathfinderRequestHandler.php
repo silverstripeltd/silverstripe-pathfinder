@@ -197,11 +197,11 @@ class PathfinderRequestHandler extends RequestHandler
 
         $actions = FieldList::create(
             FormAction::create('goBack', 'Previous')
-                ->addExtraClass('action-next')
+                ->addExtraClass('action-prev')
                 ->setUseButtonTag(true)
                 ->setDisabled(!$this->hasPreviousQuestion()),
             FormAction::create('doSubmitQuestion', 'Next')
-                ->addExtraClass('action-prev')
+                ->addExtraClass('action-next')
                 ->setUseButtonTag(true)
         );
 
@@ -447,21 +447,20 @@ class PathfinderRequestHandler extends RequestHandler
     public function getGatheredTerms()
     {
         $store = $this->getStore();
+        $terms = TaxonomyTerm::get()->byIDs([0]);
+        $choiceIds = [];
 
-        if (!$store->count()) {
-            // No terms gathered
-            return TaxonomyTerm::get()->byIDs([0]);
+        if ($store->count()) {
+            foreach ($store->get() as $entry) {
+                $choiceIds = array_merge($choiceIds, $entry->ChoiceIDs);
+            }
+
+            if (count($choiceIds)) {
+                $terms = TaxonomyTerm::get()->filter(['Choices.ID' => $choiceIds]);
+            }
         }
 
-        $termIds = [];
-
-        foreach ($this->getStore()->get() as $entry) {
-            $termIds = array_merge($termIds, $entry->ChoiceIDs);
-        }
-
-        $terms = TaxonomyTerm::get()->filter(['Choices.ID' => $termIds]);
-
-        $this->extend('updateGatheredTerms', $terms, $termIds,$store);
+        $this->extend('updateGatheredTerms', $terms, $choiceIds, $store);
 
         return $terms;
     }

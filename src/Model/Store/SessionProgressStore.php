@@ -2,7 +2,6 @@
 
 namespace CodeCraft\Pathfinder\Model\Store;
 
-
 use Psr\Log\LoggerInterface;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Session;

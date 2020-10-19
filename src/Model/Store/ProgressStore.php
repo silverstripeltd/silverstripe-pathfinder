@@ -31,9 +31,9 @@ class ProgressStore
     private static $validate_sequence = true;
 
     /**
-     * @var array|null
+     * @var array
      */
-    protected $entries;
+    protected $entries = [];
 
     /**
      * @param RequestHandler $handler
@@ -98,7 +98,6 @@ class ProgressStore
      */
     public function clear()
     {
-        $this->entries = null;
         $this->set([]);
 
         return $this;
