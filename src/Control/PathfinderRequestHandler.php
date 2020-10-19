@@ -505,6 +505,9 @@ class PathfinderRequestHandler extends RequestHandler
         $selfExcludedIds = SiteTree::get()->filter(['HideFromPathfinders' => true])->column();
         $excludePageIds = $this->ExcludedPages()->column();
         $excludeIds = array_merge($excludePageIds, $selfExcludedIds);
+        
+        // Also exclude current PathfinderPage
+        $excludeIds[] = $this->getOwner()->data()->getPage()->ID;
 
         if (count($excludeIds)) {
             $results = $results->exclude(['ID' => $excludeIds]);
