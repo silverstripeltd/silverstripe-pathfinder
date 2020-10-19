@@ -13,6 +13,7 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\HeaderField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeMultiselectField;
 use SilverStripe\ORM\DataObject;
@@ -157,9 +158,15 @@ class Pathfinder extends DataObject implements HasRequestHandler
             if ($questionsField) {
                 $config = GridFieldConfig_CustomRelationEditor::create('Add Question', true)
                     ->setDisplayFields([
-                        'QuestionText' => function($record, $column, $grid) {
-                            return TextField::create($column);
-                        },
+                        'CMSID' => [
+                            'field' => ReadonlyField::class,
+                        ],
+                        'QuestionText' => [
+                            'field' => TextField::class,
+                        ],
+                        'FlowTitle' => [
+                            'field' => ReadonlyField::class,
+                        ],
                     ]);
 
                 $questionsField->setConfig($config);
