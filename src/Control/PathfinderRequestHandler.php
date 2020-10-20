@@ -506,8 +506,10 @@ class PathfinderRequestHandler extends RequestHandler
         $excludePageIds = $this->ExcludedPages()->column();
         $excludeIds = array_merge($excludePageIds, $selfExcludedIds);
         
-        // Also exclude current PathfinderPage
-        $excludeIds[] = $this->getOwner()->data()->getPage()->ID;
+        if ($this->data()->getPage()) {
+            // Also exclude the Pathfinder's page
+            $excludeIds[] = $this->data()->getPage()->ID;
+        }
 
         if (count($excludeIds)) {
             $results = $results->exclude(['ID' => $excludeIds]);
