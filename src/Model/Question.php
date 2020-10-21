@@ -281,7 +281,7 @@ class Question extends DataObject
      */
     public function getFlowTitle()
     {
-        return sprintf('Flow: %s', $this->Flow() ? $this->Flow()->Title : 'Default');
+        return sprintf('Flow: %s', $this->Flow()->exists() ? $this->Flow()->Title : 'Default');
     }
 
     /**
