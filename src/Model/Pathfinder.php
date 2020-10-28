@@ -119,10 +119,7 @@ class Pathfinder extends DataObject implements HasRequestHandler
 
         return sprintf(
             '<a href="%s" title="%s">%s</a>',
-            $page->Link(Controller::join_links(
-                PathfinderPageController::config()->get('pathfinder_url_segment'),
-                'pathfinder/reset'
-            )),
+            $page->Pathfinder()->getRequestHandler()->getResetLink(),
             $content,
             $content
         );
