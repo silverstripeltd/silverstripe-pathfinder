@@ -505,7 +505,7 @@ class PathfinderRequestHandler extends RequestHandler
         $selfExcludedIds = SiteTree::get()->filter(['HideFromPathfinders' => true])->column();
         $excludePageIds = $this->ExcludedPages()->column();
         $excludeIds = array_merge($excludePageIds, $selfExcludedIds);
-        
+
         if ($this->data()->getPage()) {
             // Also exclude the Pathfinder's page
             $excludeIds[] = $this->data()->getPage()->ID;
@@ -545,13 +545,33 @@ class PathfinderRequestHandler extends RequestHandler
      */
     public function getStartLink()
     {
-        $questions = $this->Questions();
-
-        if (!$questions->count()) {
+        if (!$this->Questions()->count()) {
             return $this->Link('?questions-missing=1');
         }
 
-        return $this->Link(sprintf('start'));
+        return $this->Link('start');
+    }
+
+    /**
+     * @return string
+     */
+    public function getResetLink()
+    {
+        return $this->Link('reset');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFirstQuestionLink()
+    {
+        $questions = $this->Questions();
+
+        if (!$questions->count()) {
+            return null;
+        }
+
+        return $this->Link(sprintf('question?id=%s&step=1', $questions->first()->ID));
     }
 
     /**
@@ -639,9 +659,8 @@ class PathfinderRequestHandler extends RequestHandler
      */
     public function start()
     {
-        $link = $this->Link(sprintf('question?id=%s&step=1', $this->Questions()->first()->ID));
-
-        return $this->clearAll()->redirect($this->getStore()->augmentURL($link));
+        // Take the user to the first question
+        return $this->clearAll()->redirect($this->getStore()->augmentURL($this->getFirstQuestionLink()));
     }
 
     /**
@@ -649,7 +668,11 @@ class PathfinderRequestHandler extends RequestHandler
      */
     public function reset()
     {
-        return $this->clearAll()->redirect($this->getStore()->augmentURL($this->getController()->Link()));
+        // Clear the store
+        $this->getStore()->clear();
+
+        // Take the user to the first question
+        return $this->clearAll()->redirect($this->getStore()->augmentURL($this->getFirstQuestionLink()));
     }
 
     /**
