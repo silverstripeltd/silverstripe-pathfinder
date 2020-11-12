@@ -21,6 +21,8 @@ use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\ORM\FieldType\DBString;
+use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\ORM\HasManyList;
 use SilverStripe\ORM\ManyManyList;
 use SilverStripe\Versioned\Versioned;
@@ -28,6 +30,7 @@ use SilverStripe\Versioned\Versioned;
 /**
  * A question used as a step in a Pathfinder
  *
+ * @property string QID
  * @property string QuestionText
  * @property int Sort
  * @method Pathfinder|null Pathfinder()
@@ -53,6 +56,7 @@ class Question extends DataObject
      * @var array
      */
     private static $db = [
+        'QID' => 'Varchar',
         'QuestionText' => 'Text',
         'Description' => 'HTMLText',
         'Sort' => 'Int',
@@ -145,6 +149,14 @@ class Question extends DataObject
                     $flowField->setDisabled(true);
                 }
             }
+
+            // Question identifider field
+            $qidField = $fields->dataFieldByName('QID');
+
+            $qidField
+                ->setTitle('Question identifider')
+                ->setAttribute('placeholder', $this->getDefaultQID())
+                ->setDescription('Leave blank to use default');
 
             // Quesiton text field
             $fields->replaceField(
@@ -281,7 +293,7 @@ class Question extends DataObject
      */
     public function getFlowTitle()
     {
-        return sprintf('Flow: %s', $this->Flow()->exists() ? $this->Flow()->Title : 'Default');
+        return $this->Flow()->exists() ? $this->Flow()->Title : 'Default';
     }
 
     /**
@@ -291,8 +303,8 @@ class Question extends DataObject
     {
         $parts = [
             $this->QuestionText,
-            ' (Q#',
-            $this->ID
+            ' (Q: ',
+            $this->QID ?: $this->getDefaultQID()
         ];
 
         if ($this->Flow()) {
@@ -305,10 +317,20 @@ class Question extends DataObject
     }
 
     /**
+     * Useful for identifying this question, (e.g {@see Pathfinder::getCMSFields()})
+     *
      * @return string
      */
-    public function CMSID()
+    public function getCMSID()
     {
-        return sprintf('Q#%s', $this->ID);
+        return sprintf('Q: %s', $this->getDefaultQID());
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultQID()
+    {
+        return $this->ID;
     }
 }

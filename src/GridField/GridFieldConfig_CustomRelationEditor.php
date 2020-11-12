@@ -13,6 +13,7 @@ use SilverStripe\Forms\GridField\GridFieldToolbarHeader;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\Versioned\VersionedGridFieldState\VersionedGridFieldState;
 use SilverStripe\Versioned\VersionedGridFieldStateExtension;
+use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 
 /**
  * A customised relation editor config for managing Pathfinder content
@@ -34,6 +35,7 @@ class GridFieldConfig_CustomRelationEditor extends GridFieldConfig
             $this->addComponents([
                     new GridFieldButtonRow('after'),
                     new GridFieldToolbarHeader(),
+                    new GridFieldTitleHeader(),
                     (new \Symbiote\GridFieldExtensions\GridFieldAddNewInlineButton('buttons-after-left'))
                         ->setTitle($addButtonTitle),
                     new \Symbiote\GridFieldExtensions\GridFieldEditableColumns(),

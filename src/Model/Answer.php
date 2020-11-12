@@ -146,9 +146,12 @@ class Answer extends DataObject
             if ($choicesField) {
                 $config = GridFieldConfig_CustomRelationEditor::create('Add Choice', true)
                     ->setDisplayFields([
-                        'ChoiceText' => function($record, $column, $grid) {
-                            return TextField::create($column);
-                        },
+                        'ChoiceText' => [
+                            'title' => 'Choice',
+                            'callback' => function($record, $column, $grid) {
+                                return TextField::create($column);
+                            },
+                        ],
                     ]);
 
                 $choicesField->setConfig($config);
