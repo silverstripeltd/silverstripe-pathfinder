@@ -125,6 +125,7 @@ class AnswerTest extends SapphireTest
 
         $expectedText2 = 'Question 2';
         $question2 = Question::create([
+            'QID' => 'Custom',
             'QuestionText' => $expectedText2,
             'PathfinderID' => $pathfinder->ID,
             'FlowID' => $flow->ID,
@@ -152,9 +153,9 @@ class AnswerTest extends SapphireTest
         $this->assertSame(
             [
                 'Flow_Default' => 'Default flow',
-                3 => 'Question 1 (Q#3, in Flow: Flow 1)',
+                3 => 'Question 1 (Q: 3, in Flow: Flow 1)',
                 'Flow_1' => 'Flow 1',
-                4 => 'Question 2 (Q#4, in Flow: Flow 1)',
+                4 => 'Question 2 (Q: Custom, in Flow: Flow 1)',
             ],
             $field->getSource(),
             'Field should have a range of options based on flows and questions'

@@ -155,13 +155,25 @@ class Pathfinder extends DataObject implements HasRequestHandler
             if ($questionsField) {
                 $config = GridFieldConfig_CustomRelationEditor::create('Add Question', true)
                     ->setDisplayFields([
-                        'CMSID' => [
-                            'field' => ReadonlyField::class,
+                        'QID' => [
+                            'title' => 'Question Identifider',
+                            'callback' => function($record, $column, $grid) {
+                                $placeholder = 'Leave blank to use default';
+
+                                if ($record->ID) {
+                                    $placeholder = sprintf('%s (%s)', $record->ID, $placeholder);
+                                }
+
+                                return TextField::create($column)
+                                    ->setAttribute('placeholder', $placeholder);
+                            },
                         ],
                         'QuestionText' => [
+                            'title' => 'Question',
                             'field' => TextField::class,
                         ],
                         'FlowTitle' => [
+                            'title' => 'Flow',
                             'field' => ReadonlyField::class,
                         ],
                     ]);
