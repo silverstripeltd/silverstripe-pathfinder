@@ -109,9 +109,15 @@ class Pathfinder extends DataObject implements HasRequestHandler
      */
     public static function reset_link($arguments, $content = null)
     {
+        $controller = Controller::curr();
+
+        if (!Controller::curr()->hasMethod('data')) {
+            return $content;
+        }
+
         // Let's assume that the current controller is the page as a controller
         /** @var PathfinderPage $page */
-        $page = Controller::curr()->data();
+        $page = $controller->data();
 
         if (!$page) {
             return $content;
