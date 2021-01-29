@@ -1,0 +1,13 @@
+en:
+  CodeCraft\Pathfinder\Model\Pathfinder:
+    START_BUTTON_TEXT: 'Start'
+    CONTINUE_BUTTON_TEXT: 'Continue'
+
+  CodeCraft\Pathfinder\Control\PathfinderRequestHandler:
+    PREVIOUS_BUTTON_TEXT: 'Previous'
+    NEXT_BUTTON_TEXT: 'Next'
+    NO_QUESTION_MESSAGE: 'No options available'
+    NO_ANSWER_MESSAGE: 'No answers to display'
+    SUBMIT_QUESTION_ERROR_CHOICE_MISSING: 'Please choose an answer.'
+    SUBMIT_QUESTION_ERROR_SOMETHING_WENT_WRONG: 'Something went wrong, please try again.'
+    SUBMIT_QUESTION_ERROR_CHOICE_INCONGRUENCY: 'Something went wrong. The pathfinder was unable to apply your choice to an available path.'

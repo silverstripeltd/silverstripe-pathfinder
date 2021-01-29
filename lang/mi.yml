@@ -1,0 +1,13 @@
+mi:
+  CodeCraft\Pathfinder\Model\Pathfinder:
+    START_BUTTON_TEXT: 'Timata'
+    CONTINUE_BUTTON_TEXT: 'Haere tonu'
+
+  CodeCraft\Pathfinder\Control\PathfinderRequestHandler:
+    PREVIOUS_BUTTON_TEXT: 'Hoki'
+    NEXT_BUTTON_TEXT: 'Atu'
+    NO_QUESTION_MESSAGE: 'Kaore he waahanga e waatea ana'
+    NO_ANSWER_MESSAGE: 'Kaore he whakautu hei whakaatu'
+    SUBMIT_QUESTION_ERROR_CHOICE_MISSING: 'Tohua mai he whakautu.'
+    SUBMIT_QUESTION_ERROR_SOMETHING_WENT_WRONG: 'I hapa tetahi mea, tena koa whakamatauria.'
+    SUBMIT_QUESTION_ERROR_CHOICE_INCONGRUENCY: 'I he tetahi mea. Kare i taea e te kaiarahi te tono i to whiringa ki tetahi huarahi e waatea ana.'
