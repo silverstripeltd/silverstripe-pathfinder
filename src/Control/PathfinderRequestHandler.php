@@ -197,11 +197,11 @@ class PathfinderRequestHandler extends RequestHandler
         );
 
         $actions = FieldList::create(
-            FormAction::create('goBack', 'Previous')
+            FormAction::create('goBack', _t(self::class . '.PREVIOUS_BUTTON_TEXT', 'Previous'))
                 ->addExtraClass('action-prev')
                 ->setUseButtonTag(true)
                 ->setDisabled(!$this->hasPreviousQuestion()),
-            FormAction::create('doSubmitQuestion', 'Next')
+            FormAction::create('doSubmitQuestion', _t(self::class . '.NEXT_BUTTON_TEXT', 'Next'))
                 ->addExtraClass('action-next')
                 ->setUseButtonTag(true)
         );
@@ -211,7 +211,10 @@ class PathfinderRequestHandler extends RequestHandler
         $question = $this->getCurrentQuestion();
 
         if (!$question) {
-            $fields->add(HeaderField::create('NoQuestionMessage', 'No options available'));
+            $fields->add(HeaderField::create(
+                'NoQuestionMessage',
+                _t(self::class . '.NO_QUESTION_MESSAGE', 'No options available')
+            ));
 
             $form = $this->getStore()->updateForm($form);
             $this->extend('updateForm', $form);
@@ -222,7 +225,10 @@ class PathfinderRequestHandler extends RequestHandler
         $answers = $question->Answers();
 
         if (!$answers->count()) {
-            $fields->add(HeaderField::create('NoQuestionMessage', 'No answers to display'));
+            $fields->add(HeaderField::create(
+                'NoAnswerMessage',
+                _t(self::class . '.NO_ANSWER_MESSAGE', 'No answers to display')
+            ));
 
             $form = $this->getStore()->updateForm($form);
             $this->extend('updateForm', $form);
@@ -318,7 +324,7 @@ class PathfinderRequestHandler extends RequestHandler
     {
         if (!array_key_exists('Choices', $data)) {
             // We can't submit anything without an choice being made
-            $form->sessionError('Please choose an answer');
+            $form->sessionError(_t(self::class . '.SUBMIT_QUESTION_ERROR_CHOICE_MISSING', 'Please choose an answer'));
 
             return $this->getController()->redirectBack();
         }
@@ -327,7 +333,9 @@ class PathfinderRequestHandler extends RequestHandler
             !count($data['Choices'])
             || !array_key_exists($data['CurrentQuestionID'], $data['Choices'])) {
             // The data is poorly shaped
-            $form->sessionError('Something went wrong, please try again.');
+            $form->sessionError(
+                _t(self::class . '.SUBMIT_QUESTION_ERROR_SOMETHING_WENT_WRONG', 'Something went wrong, please try again.')
+            );
 
             return $this->getController()->redirectBack();
         }
@@ -346,8 +354,10 @@ class PathfinderRequestHandler extends RequestHandler
         $choices = Choice::get()->byIds($choiceIds);
 
         if (!$choices->count()) {
-            $form->sessionError('Something went wrong. The pathfinder was unable to use the answer you ' .
-                'chose with the existing choices in the path.');
+            $form->sessionError(_t(
+                self::class . '.SUBMIT_QUESTION_ERROR_CHOICE_INCONGRUENCY',
+                'Something went wrong. The pathfinder was unable to apply your choice to an available path.'
+            ));
 
             return $this->getController()->redirectBack();
         }

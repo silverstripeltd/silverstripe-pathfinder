@@ -368,7 +368,7 @@ class Pathfinder extends DataObject implements HasRequestHandler
      */
     public function getStartButtonText()
     {
-        return $this->getField('StartButtonText') ?: 'Start';
+        return $this->getField('StartButtonText') ?: _t(self::class . '.START_BUTTON_TEXT', 'Start');
     }
 
     /**
@@ -376,7 +376,7 @@ class Pathfinder extends DataObject implements HasRequestHandler
      */
     public function getContinueButtonText()
     {
-        return $this->getField('ContinueButtonText') ?: 'Continue';
+        return $this->getField('ContinueButtonText') ?: _t(self::class . '.CONTINUE_BUTTON_TEXT', 'Continue');
     }
 
     /**
