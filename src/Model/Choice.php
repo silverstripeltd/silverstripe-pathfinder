@@ -9,6 +9,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\Taxonomy\TaxonomyTerm;
+use SilverStripe\Versioned\Versioned;
 
 /**
  * The choices for a Pathfinder's answer. One or more of these makes an answer single or multi-choice
@@ -20,6 +21,13 @@ use SilverStripe\Taxonomy\TaxonomyTerm;
  */
 class Choice extends DataObject
 {
+    /**
+     * @var array
+     */
+    private static $extensions = [
+        Versioned::class,
+    ];
+
     /**
      * @var string
      */
