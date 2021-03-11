@@ -2,6 +2,7 @@ en:
   CodeCraft\Pathfinder\Model\Pathfinder:
     START_BUTTON_TEXT: 'Start'
     CONTINUE_BUTTON_TEXT: 'Continue'
+    NO_QUESTIONS_TEXT: 'Sorry, no questions have been added to this Pathfinder yet.'
 
   CodeCraft\Pathfinder\Control\PathfinderRequestHandler:
     PREVIOUS_BUTTON_TEXT: 'Previous'

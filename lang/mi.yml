@@ -2,6 +2,7 @@ mi:
   CodeCraft\Pathfinder\Model\Pathfinder:
     START_BUTTON_TEXT: 'Timata'
     CONTINUE_BUTTON_TEXT: 'Haere tonu'
+    NO_QUESTIONS_TEXT: 'Aroha mai, kaore ano kia whakauruhia he patai ki tenei Kaiwhakamuri.'
 
   CodeCraft\Pathfinder\Control\PathfinderRequestHandler:
     PREVIOUS_BUTTON_TEXT: 'Hoki'
