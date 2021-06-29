@@ -136,8 +136,16 @@ class Pathfinder extends DataObject implements HasRequestHandler
      */
     public function onAfterDelete()
     {
-        $this->Questions()->removeAll();
-        $this->Flows()->removeAll();
+        // Establish whether we should clean up
+        $cleanUp = true;
+
+        // Allow implementors to apply alternative scenarios
+        $this->invokeWithExtensions('updateCleanUp', $cleanUp);
+
+        if ($cleanUp) {
+            $this->Questions()->removeAll();
+            $this->Flows()->removeAll();
+        }
 
         parent::onAfterDelete();
     }

@@ -105,7 +105,15 @@ class Answer extends DataObject
      */
     public function onAfterDelete()
     {
-        $this->Choices()->removeAll();
+        // Establish whether we should clean up
+        $cleanUp = true;
+
+        // Allow implementors to apply alternative scenarios
+        $this->invokeWithExtensions('updateCleanUp', $cleanUp);
+
+        if ($cleanUp) {
+            $this->Choices()->removeAll();
+        }
 
         parent::onAfterDelete();
     }
