@@ -109,7 +109,15 @@ class Question extends DataObject
      */
     public function onAfterDelete()
     {
-        $this->Answers()->removeAll();
+        // Establish whether we should clean up
+        $cleanUp = true;
+
+        // Allow implementors to apply alternative scenarios
+        $this->invokeWithExtensions('updateCleanUp', $cleanUp);
+
+        if ($cleanUp) {
+            $this->Answers()->removeAll();
+        }
 
         parent::onAfterDelete();
     }
