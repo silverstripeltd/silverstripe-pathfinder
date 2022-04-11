@@ -17,7 +17,7 @@ class SessionProgressStore extends ProgressStore
      */
     public function add(ProgressEntry $entry)
     {
-        parent::add($entries);
+        parent::add($entry);
 
         Controller::curr()->getRequest()->getSession()->set(
             $this->getStorageName(),
@@ -34,7 +34,7 @@ class SessionProgressStore extends ProgressStore
     {
         $existing = parent::get();
 
-        if (is_array($existing)) {
+        if (is_array($existing) && count($existing)) {
             return $existing;
         };
 
@@ -74,7 +74,7 @@ class SessionProgressStore extends ProgressStore
 
         Controller::curr()->getRequest()->getSession()->set(
             $this->getStorageName(),
-            json_encode($this->get()->toArray())
+            json_encode($entries)
         );
 
         return $this;
