@@ -77,7 +77,7 @@ class RequestVarProgressStore extends ProgressStore
         $request = Controller::curr()->getRequest();
 
         // Accept query variable from GET or POST
-        $this->encodedProgress = urldecode($request->requestVar($this->getProgressVarName()));
+        $this->encodedProgress = urldecode($request->requestVar($this->getProgressVarName()) ?? '');
 
         return $this->encodedProgress;
     }
