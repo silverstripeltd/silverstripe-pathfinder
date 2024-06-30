@@ -189,7 +189,7 @@ class Question extends DataObject
             if ($flowField) {
                 // Restrict the range to only Flows for this question's Pathfinder
                 $flowField
-                    ->setSource($this->Pathfinder()->Flows()->map())
+                    ->setSource($this->Pathfinder()->Flows())
                     ->setEmptyString('Use default Flow');
             }
 
